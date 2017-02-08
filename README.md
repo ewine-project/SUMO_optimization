@@ -56,25 +56,37 @@ The header string conveys four types of information; design parameter size, lowe
 
 Assume we have a black box system with four parameters and two performance objectives. After performing 5 DoE experiments as shown in Figure 3, we want to optimize and calculate the next sample point using the SUMO toolbox.
 
-1. Create a dataset file similar to Figure 3.
-	echo -e "[20 6 6400 0 ; 60 24 31200 16 ; 20 6 800 1 ];\n40\t12\t14400\t0\t18.573\t-4.1033539773\n40\t12\t14400\t0\t18.573\t-4.1033539773\n40\t18\t15200\t1\t14.476\t-4.0842513487\n60\t18\t16000\t1\t11.456\t-4.0407870192\n40\t6\t24800\t2\t68.696\t-4.3299832188" > /home/ewine/sumo-toolbox/samplesValues.txt
+Create a dataset file similar to Figure 3.
+```bash
+echo -e "[20 6 6400 0 ; 60 24 31200 16 ; 20 6 800 1 ];\n40\t12\t14400\t0\t18.573\t-4.1033539773\n40\t12\t14400\t0\t18.573\t-4.1033539773\n40\t18\t15200\t1\t14.476\t-4.0842513487\n60\t18\t16000\t1\t11.456\t-4.0407870192\n40\t6\t24800\t2\t68.696\t-4.3299832188" > /home/ewine/sumo-toolbox/samplesValues.txt
+```
 
-2. Copy the multi-objective SUMO interface file into the SUMO toolbox directory
-	cp BMoptMOSBO.m /home/ewine/sumo-toolbox
+Copy the multi-objective SUMO interface file into the SUMO toolbox directory
+```bash
+cp BMoptMOSBO.m /home/ewine/sumo-toolbox
+```
 
-3. Start MATLAB program
-	/home/ewine/MATLAB/bin/matlab -nodesktop –nosplash
+Start MATLAB program
+```bash
+/home/ewine/MATLAB/bin/matlab -nodesktop –nosplash
+```
 
-4. From MATLAB workspace, navigate into the SUMO toolbox directory
-	cd /home/ewine/sumo-toolbox
+From MATLAB workspace, navigate into the SUMO toolbox directory
+```matlab
+cd /home/ewine/sumo-toolbox
+```
 
-5. Set SUMO toolbox path variables
-	startup
+Set SUMO toolbox path variables
+```matlab
+startup
+```
 
-6. Execute the SUMO multi-objective optimizer
-	[newSample pred_obj] = BMoptMOSBO('/home/ewine/sumo-toolbox/samplesValues.txt');
+Execute the SUMO multi-objective optimizer
+```matlab
+[newSample pred_obj] = BMoptMOSBO('/home/ewine/sumo-toolbox/samplesValues.txt');
+```
 
-7. The result is displayed on the MATLAB screen where next_sample = [20 24 6400 14] and pred_obj = [39.6004 -4.1898]
+The result is displayed on the MATLAB screen where next_sample = [20 24 6400 14] and pred_obj = [39.6004 -4.1898]
 
 
 ### Node-red
@@ -84,31 +96,46 @@ In the previous example, a multi-objective black-box system was optimized inside
 
 ### Running MATLAB as a daemon program
 
-1. Copy the MATLAB daemon (matlabd) program to the /usr/local/bin/ directory
-	sudo cp matlabd /usr/local/bin/matlabd
+Copy the MATLAB daemon (matlabd) program to the /usr/local/bin/ directory
+```bash
+sudo cp matlabd /usr/local/bin/matlabd
+```
 
-2. Update the MATLAB executable path inside the matlabd program
-	sudo sed -i 's/MATLAB=.*/MATLAB="\/home\/ewine\/MATLAB\/bin\/matlab -nosplash -nodesktop"/g' /usr/local/bin/matlabd
+Update the MATLAB executable path inside the matlabd program
+```bash
+sudo sed -i 's/MATLAB=.*/MATLAB="\/home\/ewine\/MATLAB\/bin\/matlab -nosplash -nodesktop"/g' /usr/local/bin/matlabd
+```
 
-3. Copy kill.m and kill.mexa64 files into MATLAB toolbox folder
-	cp kill.m kill.mexa64 /home/ewine/MATLAB/toolbox/local
+Copy kill.m and kill.mexa64 files into MATLAB toolbox folder
+```bash
+cp kill.m kill.mexa64 /home/ewine/MATLAB/toolbox/local
+```
 
-4. Check that matlabd is working
-	matlabd "1+2"
-	You might need to re-execute the command (matlabd "1+2") if it hangs on the screen. However, once matlabd is started consecutive command/script executions become much faster. 
+Check that matlabd is working
+```bash
+matlabd "1+2"
 
-5. On the other hand, executing a MATLAB script is done by passing the full path of the script as an argument to matlabd. Moreover, it is advisable to clear the workspace before executing a script since the state of the workspace is not known beforehand.
-	printf "clear\n1+2\n" > /home/ewine/test.m
-	matlabd /home/ewine/test.m
+ans =
+3
+```
+You might need to re-execute the command (matlabd "1+2") if it hangs on the screen. However, once matlabd is started consecutive command/script executions become much faster. 
 
+On the other hand, executing a MATLAB script is done by passing the full path of the script as an argument to matlabd. Moreover, it is advisable to clear the workspace before executing a script since the state of the workspace is not known beforehand.
+```bash
+printf "clear\n1+2\n" > /home/ewine/test.m
+matlabd /home/ewine/test.m
+```
 
 After making sure that MATLAB daemon is working, it is time to execute a SUMO optimization problem within the node-red framework. There are two things we need to do beforehand.
-1. Install the SUMO node inside node-red framework
-	cp -r node-red-SUMO /home/ewine/.node-red/
+Install the SUMO node inside node-red framework
+```bash
+cp -r node-red-SUMO /home/ewine/.node-red/
+```
 
-2. Configure MATLAB to set SUMO path variables every time it is started
-	cp /home/ewine/sumo-toolbox/startup.m /home/ewine/MATLAB/toolbox/local
-
+Configure MATLAB to set SUMO path variables every time it is started
+```bash
+cp /home/ewine/sumo-toolbox/startup.m /home/ewine/MATLAB/toolbox/local
+```
 
 Finally create a node-red flow, shown in Figure 4, to execute a single level SUMO optimization.
 
