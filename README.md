@@ -30,6 +30,7 @@ The SUMO toolbox is freely available as a MATLAB package and it can be downloade
 Out of the box, the SUMO toolbox is used as a complete multi-objective optimizer. It has a controller unit managing the optimization process and is configured by using an '*XML*' configuration file. Figure 2 shows the conceptual plot of the SUMO toolbox when used out of the box.
 
 ![out of the box](out-of-the-box.png)
+
 Figure 2. SUMO toolbox out of the box
 
 After configuring the XML file, a user starts the optimization process and the progress is displayed (textual and graphical) on the screen until a stopping criteria is met. Moreover, a large number (60+) of examples are provided within the toolbox and it is easy to start working on a wide range of problems.
@@ -137,6 +138,7 @@ cp /home/ewine/sumo-toolbox/startup.m /home/ewine/MATLAB/toolbox/local
 Finally create a node-red flow, shown in Figure 4, to execute a single level SUMO optimization.
 
 ![SUMO optimization flow](SUMO_node-red.png)
+
 Figure 4. SUMO optimization node-red flow
 
 The code behind Figure 4 is stored in the file '*SUMO_opt.flow*'. Make a special attention that the payload pushed to the SUMO node is an array of filename objects and it possible to optimize multiple multi-objective problems. Executing the flow of Figure 4, clicking the start button, performs the same operation as we did in the MATLAB section. You might need to wait for the first time or re-start the flow again until the MATLAB program is up and running.

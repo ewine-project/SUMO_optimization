@@ -121,7 +121,7 @@ if isempty( xmin )
     
     fprintf(1, 'No unique point found. Random.\n');
 end
-%% evaluate new samples and add to set    
+%% evaluate new samples and add to set
 newSample = outFunc(xmin(1,:));         % convert the new sample back to model space
 
 end
