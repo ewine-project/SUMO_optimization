@@ -3,7 +3,7 @@
 Many wireless networks that do exist today are difficult to be characterized in mathematical terms and thus we usually treat them as black box systems. Finding the optimum settings of a black box system is usually carried out by exhaustively searching the design space and selecting the optimum settings. In wireless networks, however, exhaustive searching is almost impossible since experimentation is an expensive operation. This mainly accounts to orchestration overheads, network stabilization delays and control plane unresponsiveness. To this end, one relies on optimization techniques to find the optimum design settings of wireless solutions. From a general perspective, optimization tools work in a search and concur principle. During the searching phase, also called exploration phase, they search the design space to get an overall view of the black box system. Later, they concur a specific region of the design space and exploit the optimum design parameters. Now speaking of optimization tools, there exist wide verities of them specifically tuned for different problem types. Here we will use the [SUrrogate MOdeling (SUMO)](http://sumo.intec.ugent.be/SUMO) toolbox for solving complex black box wireless problems.
 
 ![SUMO toolbox](Metamodel-generation.png)
-Figure 1. SUMO toolbox: Source, requirements and metamodel creation
+*Figure 1. SUMO toolbox: Source, requirements and metamodel creation*
 
 A complete tutorial about the principles of the SUMO toolbox is out of the scope of this tutorial and hence readers are advised to look the reference https://dl.acm.org/citation.cfm?id=1859919 for the details.
 
@@ -30,8 +30,7 @@ The SUMO toolbox is freely available as a MATLAB package and it can be downloade
 Out of the box, the SUMO toolbox is used as a complete multi-objective optimizer. It has a controller unit managing the optimization process and is configured by using an '*XML*' configuration file. Figure 2 shows the conceptual plot of the SUMO toolbox when used out of the box.
 
 ![out of the box](out-of-the-box.png)
-
-Figure 2. SUMO toolbox out of the box
+*Figure 2. SUMO toolbox out of the box*
 
 After configuring the XML file, a user starts the optimization process and the progress is displayed (textual and graphical) on the screen until a stopping criteria is met. Moreover, a large number (60+) of examples are provided within the toolbox and it is easy to start working on a wide range of problems.
 
@@ -138,8 +137,7 @@ cp /home/ewine/sumo-toolbox/startup.m /home/ewine/MATLAB/toolbox/local
 Finally create a node-red flow, shown in Figure 4, to execute a single level SUMO optimization.
 
 ![SUMO optimization flow](SUMO_node-red.png)
-
-Figure 4. SUMO optimization node-red flow
+*Figure 4. SUMO optimization node-red flow*
 
 The code behind Figure 4 is stored in the file '*SUMO_opt.flow*'. Make a special attention that the payload pushed to the SUMO node is an array of filename objects and it possible to optimize multiple multi-objective problems. Executing the flow of Figure 4, clicking the start button, performs the same operation as we did in the MATLAB section. You might need to wait for the first time or re-start the flow again until the MATLAB program is up and running.
 
