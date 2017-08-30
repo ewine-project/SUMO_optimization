@@ -1,4 +1,4 @@
-%> @file "BMoptSUMO.m"
+%> @file "SOSBO.m"
 %> @authors: SUMO Lab Team
 %> @version 7.0.3 ($Revision: 7155 $)
 %> @date $LastChangedDate: 2011-06-02 10:46:47 +0200 (Thu, 02 Jun 2011) $
@@ -19,14 +19,14 @@
 %>
 %> Contact : sumo@sumo.intec.ugent.be - http://sumo.intec.ugent.be
 %> Signature
-%>	 BMoptSUMO(samplesValuesFile)
+%>	 SOSBO(samplesValuesFile, outDimIdx)
 %
 % ======================================================================
-%> @brief EGO BMoptSUMO (kriging + EGO)
+%> @brief Single Objective Surrogate Based Optimizer (SOSBO)
 % ======================================================================
 % Modified by : Michael Mehari
 % Email: mmehari@intec.ugent.be
-function newSample = BMoptSUMO(samplesValuesPath)
+function newSample = SOSBO(samplesValuesPath, outDimIdx)
 
 % import samples and values data
 samplesValueData = importdata(samplesValuesPath);
@@ -35,10 +35,9 @@ samplesValues = samplesValueData.data;
 % bounds of the input variables
 bounds = eval(samplesValueData.textdata{1});
 
-inDimIdx =  (1:size(bounds,2));
-outDimIdx = (size(bounds,2)+1:size(samplesValues,2));
+inDimIdx =  (1 : size(bounds,2));
 
-nLengths = bounds(2,:); % size of input variables
+numOfItemsPerSamples = (bounds(2,:) - bounds(1,:))./bounds(3,:) + 1; % size of input variables
 
 transl = (bounds(2,:) + bounds(1,:))/2.0;
 scale = (bounds(2,:) - bounds(1,:))/2.0;
@@ -70,14 +69,14 @@ bf = BasisFunction( 'corrmatern32', inDim, lb, ub, {'log'});
 opts.hpOptimizer = SQPLabOptimizer( inDim, 1 );
 
 %% select optimizer to use
-optimizer = DiscreteOptimizer(inDim, 1, nLengths);
+optimizer = DiscreteOptimizer(inDim, 1, numOfItemsPerSamples);
 optimizer = optimizer.setBounds(-ones(1,inDim), ones(1,inDim));
 
 %% candidateRankers to use
 rankers = {expectedImprovement(inDim, 'none', [], []) maxvar(inDim, 'none') };
 
 %% main loop
-nrSamples = prod(nLengths);
+nrSamples = prod(numOfItemsPerSamples);
     
 % build and fit Kriging object
 k = KrigingModel( opts, theta0, 'regpoly0', bf, 'useLikelihood' );
@@ -88,14 +87,14 @@ state.lastModels{1}{1} = k;
 state.samples = samples;
 state.values = values;
 
-for j=1:length(rankers)
+for i=1:length(rankers)
 
-    rankers{j} = rankers{j}.initNewSamples(state);
+    rankers{i} = rankers{i}.initNewSamples(state);
 
     initialPopulation = rand(nrSamples, inDim) .* 2 - 1;
 
-    foundvalues = rankers{j}.score(initialPopulation, state);
-    [dummy idx] = sort( foundvalues, 1, 'descend' );
+    foundvalues = rankers{i}.score(initialPopulation, state);
+    [~, idx] = sort( foundvalues, 1, 'descend' );
 
     %% optimize best candidate
 
@@ -108,11 +107,12 @@ for j=1:length(rankers)
     % give the state to the optimizer - might contain useful info such as # samples
     optimizer = optimizer.setState(state);
 
-    optimFunc = @(x) rankers{j}.scoreMinimize(x, state);
-    [dummy xmin fmin] = optimizer.optimize(optimFunc);
+    optimFunc = @(x) rankers{i}.scoreMinimize(x, state);
+    [~, xmin, fmin] = optimizer.optimize(optimFunc);
 
     dups = buildDistanceMatrix( xmin, samples, 1 );
     index = find(all(dups > distanceThreshold, 2));
+
     xmin = xmin(index,:);
     fmin = fmin(index,:);
 
@@ -128,5 +128,7 @@ end
 
 %% evaluate new samples and add to set    
 newSample = outFunc(xmin(1,:));         % convert the new sample back to model space
+
+format longG;
 
 end

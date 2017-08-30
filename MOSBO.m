@@ -1,4 +1,4 @@
-%> @file "BMoptMOSBO.m"
+%> @file "MOSBO.m"
 %> @authors: SUMO Lab Team
 %> @version x.x.x ($Revision: 7155 $)
 %> @date $LastChangedDate: 2011-06-02 10:46:47 +0200 (Thu, 02 Jun 2011) $
@@ -19,14 +19,14 @@
 %>
 %> Contact : sumo@sumo.intec.ugent.be - http://sumo.intec.ugent.be
 %> Signature
-%>	 BMoptMOSBO(samplesValuesPath)
+%>	 MOSBO(samplesValuesPath, outDimIdx)
 %
 % ======================================================================
-%> @brief EGO BMoptMOSBO (kriging + EMO + ...)
+%> @brief Multi Objective Surrogate Based Optimizer (MOSBO)
 % ======================================================================
 % Modified by : Michael Mehari
 % Email: mmehari@intec.ugent.be
-function [newSample pred_obj] = BMoptMOSBO(samplesValuesPath)
+function MOSBO(samplesValuesPath, outDimIdx)
 
 % import samples and values data
 samplesValueData = importdata(samplesValuesPath);
@@ -36,7 +36,6 @@ samplesValues = samplesValueData.data;
 bounds = eval(samplesValueData.textdata{1});
 
 inDimIdx =  (1:size(bounds,2));
-outDimIdx = (size(bounds,2)+1:size(samplesValues,2));
 
 nLengths = (bounds(2,:) - bounds(1,:))./bounds(3,:) + 1; % size of input variables
 
@@ -99,15 +98,17 @@ for i=1:length(rankers)
     optimFunc = @(x) rankers{i}.scoreMinimize(x, state);
     [~, xmin, fmin] = optimizer.optimize(optimFunc);
 
-    % Predict objectives for each design parameter from the kringing model
+    % Predict objectives for each design parameter from the model
     pred_obj = zeros(size(xmin,1), outDim);
     for j=1:outDim
         pred_obj(:,j) = state.lastModels{j}{1}.evaluateInModelSpace( xmin );
     end
-    pred_obj = sortrows(pred_obj);
 
     dups = buildDistanceMatrix( xmin, samples, 1 );
-    xmin = xmin(all(dups > distanceThreshold, 2),:);
+    index = find(all(dups > distanceThreshold, 2));
+
+    xmin = xmin(index,:);
+    fmin = fmin(index,:);
 
     if ~isempty( xmin )
         break;
@@ -121,7 +122,29 @@ if isempty( xmin )
     
     fprintf(1, 'No unique point found. Random.\n');
 end
-%% evaluate new samples and add to set
-newSample = outFunc(xmin(1,:));         % convert the new sample back to model space
+%% evaluate new samples and add to set    
+newSample = round(outFunc(xmin(1,:)));          % convert the new sample back to model space
+HV_PoI = abs(fmin(1));                          % Hyper Volume Probability of Improvement
+
+% Display new sample
+newSample_str = sprintf('newSample =\n');
+for i = 1:inDim
+    newSample_str = sprintf('%s%u,', newSample_str, newSample(i));
+end
+newSample_str = sprintf('%s\n', newSample_str(1:end-1));
+disp(newSample_str);
+
+% Display HV_PoI
+HV_PoI_str = sprintf('HV_PoI =\n%f\n', HV_PoI);
+disp(HV_PoI_str);
+
+% Display predicted objectives
+pred_obj_str = sprintf('pred_obj =\n');
+for i = 1:outDim
+    pred_obj_str = sprintf('%s%f\n', pred_obj_str, pred_obj(i));
+end
+disp(pred_obj_str);
+
+format longG;
 
 end
