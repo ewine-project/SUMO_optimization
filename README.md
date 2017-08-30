@@ -83,7 +83,7 @@ startup
 
 Execute the SUMO multi-objective optimizer
 ```matlab
-[newSample pred_obj] = MOSBO('/home/ewine/sumo-toolbox/samplesValues.txt', [5,6]);
+MOSBO('/home/ewine/sumo-toolbox/samplesValues.txt', [5,6]);
 ```
 
 The result is displayed on the MATLAB screen where next_sample = [20 24 6400 14] and pred_obj = [39.6004 -4.1898]
@@ -128,10 +128,10 @@ matlabd /home/ewine/test.m
 
 After making sure that MATLAB daemon is working, it is time to execute a SUMO optimization problem within the node-red framework. There are two things we need to do beforehand.
 
-First, install the SUMO node inside node-red framework
+First, install a MATLABd node inside node-red framework
 ```bash
 mkdir -p /home/ewine/.node-red/node_modules
-cp -r node-red-SUMO /home/ewine/.node-red/node_modules/
+cp -r node-red-MATLABd /home/ewine/.node-red/node_modules/
 ```
 
 Next, configure MATLAB to set SUMO path variables every time it is started
@@ -145,7 +145,7 @@ Finally create a node-red flow, shown in Figure 4, to execute a single level SUM
 
 *Figure 4. SUMO optimization node-red flow*
 
-The code behind Figure 4 is stored in the file '*SUMO_opt.flow*'. Make a special attention that the payload pushed to the SUMO node is an array of filename objects and it possible to optimize multiple multi-objective problems. Executing the flow of Figure 4, clicking the start button, performs the same operation as we did in the MATLAB section. You might need to wait for the first time or re-start the flow again until the MATLAB program is up and running.
+The code behind Figure 4 is stored in the file '*SUMO_opt.flow*'. Executing the flow of Figure 4, clicking the start button, performs the same operation as we did in the MATLAB section. You might need to wait for the first time or re-start the flow again until the MATLAB program is up and running.
 
 
 ## Contact
