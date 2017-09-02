@@ -126,12 +126,12 @@ printf "clear\n1+2\n" > /home/ewine/test.m
 matlabd /home/ewine/test.m
 ```
 
-After making sure that MATLAB daemon is working, it is time to execute a SUMO optimization problem within the node-red framework. There are two things we need to do beforehand.
+After making sure that MATLAB daemon is working, it is time to execute a SUMO optimization problem within the node-red framework. There are two things we need to do.
 
 First, install a MATLABd node inside node-red framework
 ```bash
 mkdir -p /home/ewine/.node-red/node_modules
-cp -r node-red-MATLABd /home/ewine/.node-red/node_modules/
+cp -r node-red-ewine /home/ewine/.node-red/node_modules/
 ```
 
 Next, configure MATLAB to set SUMO path variables every time it is started

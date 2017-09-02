@@ -1,0 +1,15 @@
+{
+    "name"         : "ewine",
+    "version"      : "0.0.1",
+    "description"  : "Front-end visualisation for ewine project",
+    "dependencies": {
+    },
+    "keywords": [ "ewine" ],
+    "node-red"     : {
+        "nodes": {
+         "MATLABd": "MATLABd/MATLABd.js"
+    	}
+    	
+     }
+}
+
