@@ -96,7 +96,9 @@ In the previous example, a multi-objective black-box system was optimized inside
 
 ### Running MATLAB as a daemon program
 
-Copy the MATLAB daemon (matlabd) program to the /usr/local/bin/ directory
+MATLAB is created to run as a standalone program and we have to make a little modification to make it run as a daemon program. For this, we used a Bash script and a Mex program from [MATLAB File Exchange](https://nl.mathworks.com/matlabcentral/fileexchange/30120-matlab-daemon).
+
+Copy the MATLAB daemon (matlabd) program to the /usr/local/bin/ directory.
 ```bash
 sudo cp matlabd /usr/local/bin/matlabd
 ```
