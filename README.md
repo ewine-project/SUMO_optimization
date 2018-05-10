@@ -2,7 +2,7 @@
 
 Many wireless networks that do exist today are difficult to characterize in mathematical terms and thus we usually treat them as black-box systems. Finding the optimum settings of a black-box system is usually carried out by exhaustively searching the design space and selecting the optimum settings. In wireless networks, however, exhaustive searching is almost impossible since experimentation is an expensive operation. This mainly accounts to orchestration overheads, network delays and control plane unresponsiveness. To this end, one relies on optimization techniques to find the optimum design settings of wireless solutions. From a general perspective, optimization tools work in a search and concur principle. During the searching phase, also called exploration phase, they search the design space to get an overall view of the black-box system. Later, they concur a specific region of the design space and exploit the optimum design parameters. Now speaking of optimization tools, there exist wide verities of them specifically tuned for different problem types. Here we will look at the [SUrrogate MOdeling (SUMO)](http://sumo.intec.ugent.be/SUMO) toolbox for solving complex wireless network problems.
 
-![SUMO toolbox](figures/Metamodel-generation.png)
+<img src="figures/Metamodel-generation.png" width="500">
 
 *Figure 1. SUMO toolbox: Source, requirements and metamodel creation*
 
@@ -30,7 +30,7 @@ The SUMO toolbox is freely available as a MATLAB package and it can be downloade
 
 Out of the box, the SUMO toolbox is used as a complete multi-objective optimizer. It has a controller unit managing the optimization process and is configured by using an '*XML*' configuration file. Figure 2 shows the conceptual plot of the SUMO toolbox when used out of the box.
 
-![out of the box](figures/out-of-the-box.png)
+<img src="figures/out-of-the-box.png" width="600">
 
 *Figure 2. SUMO toolbox out of the box*
 
@@ -143,7 +143,7 @@ cp /home/ewine/sumo-toolbox/startup.m /home/ewine/MATLAB/toolbox/local
 
 Finally create a node-red flow, shown in Figure 4, to execute a single level SUMO optimization.
 
-![SUMO optimization flow](figures/SUMO_node-red.png)
+<img src="figures/SUMO_node-red.png" width="600">
 
 *Figure 4. SUMO optimization node-red flow*
 
